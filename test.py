@@ -14,7 +14,7 @@ LOGGER = logging.getLogger(__name__)
 
 APP_PATH = "img_viewer.py"
 APP_TITLE = "Simple Image Viewer"
-
+PYTESSERACT_WIN_PATH = r'C:\Program Files\Tesseract-OCR\tesseract.exe' #variable used on Windows only
 
 def get_window_coordinates_by_title(title):
     os_name = system()
@@ -138,7 +138,7 @@ def parse_comparison_result_status_from_app_screenshot(filename):
     result_img = Image.open(filename)
     os_name = system()
     if os_name == "Windows":
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+        pytesseract.pytesseract.tesseract_cmd = PYTESSERACT_WIN_PATH
 
     text_from_image = pytesseract.image_to_string(result_img)
     LOGGER.info(text_from_image)
