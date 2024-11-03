@@ -6,7 +6,7 @@ from time import sleep
 from PIL import Image
 from re import search
 from platform import system
-from pytesseract.pytesseract import image_to_string
+import pytesseract
 import logging
 
 
@@ -61,12 +61,12 @@ def delete_files(files_list):
 
 
 def click_load_image_1_button(init_x, init_y):
-    pyautogui.click(init_x + 20, init_y + 90)
+    pyautogui.click(init_x + 30, init_y + 90)
     sleep(1)
 
 
 def click_load_image_2_button(init_x, init_y):
-    pyautogui.click(init_x + 820, init_y + 90)
+    pyautogui.click(init_x + 830, init_y + 90)
     sleep(1)
 
 
@@ -87,33 +87,45 @@ def click_compare_button(init_x, init_y):
 
 def type_filename_in_module_window_and_save(filename):
     pyautogui.write(filename)
-    pyautogui.click(1000, 420)
+    pyautogui.press("enter")
     sleep(2)
-    pyautogui.click(840, 370)
+    pyautogui.press("enter")
     sleep(1)
 
 
 def type_filename_in_module_window_and_save_in_jpg(filename):
     pyautogui.write(filename)
-    pyautogui.click(800, 375)
-    sleep(1)
-    pyautogui.click(800, 395)
-    sleep(1)
-    pyautogui.click(1000, 420)
-    sleep(1)
-    pyautogui.click(840, 370)
-    sleep(1)
+    os_name = system()
+    LOGGER.info(f"Operating system: {os_name}")
+    if os_name == "Windows":
+        pyautogui.press("tab")
+        sleep(1)
+        pyautogui.press("down")
+        sleep(1)
+        pyautogui.press("down")
+        sleep(1)
+        pyautogui.press("enter")
+        sleep(1)
+        pyautogui.press("enter")
+        sleep(1)
+        pyautogui.press("enter")
+        sleep(1)
+    elif os_name == "Darwin":
+        pyautogui.click(800, 375)
+        sleep(1)
+        pyautogui.click(800, 395)
+        sleep(1)
+        pyautogui.click(1000, 420)
+        sleep(1)
+        pyautogui.press("enter")
+        sleep(1)
+    else:
+        raise Exception("This function only supports Windows and macOS")
 
 
 def search_and_open_file_in_module_window(filename):
-    pyautogui.click(1100, 210)
-    sleep(1)
     pyautogui.write(filename)
     pyautogui.press("enter")
-    sleep(1)
-    pyautogui.click(630, 350)
-    sleep(1)
-    pyautogui.click(1200, 570)
     sleep(1)
 
 
@@ -124,11 +136,16 @@ def make_screenshot_of_app_and_save_with_filename(filename):
 
 def parse_comparison_result_status_from_app_screenshot(filename):
     result_img = Image.open(filename)
-    text_from_image = image_to_string(result_img)
+    os_name = system()
+    if os_name == "Windows":
+        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+    text_from_image = pytesseract.image_to_string(result_img)
+    LOGGER.info(text_from_image)
     lines = text_from_image[:-1].splitlines()
     img_comparison_result = None
     for i, line in enumerate(lines):
-        if search(r"Result:", line) and i + 1 < len(lines):
+        if search(r"Result", line) and i + 1 < len(lines):
             img_comparison_result = lines[i + 1].strip()
     return img_comparison_result
 
@@ -146,10 +163,11 @@ class TestMethods:
             "step7_report.png",
         )
         delete_files(test_generated_files_to_cleanup)
-        cls.img_viewer_app_process = subprocess.Popen(["python3", APP_PATH])
-        sleep(2)
+
+        cls.img_viewer_app_process = subprocess.Popen(["python", APP_PATH])
+        sleep(5)
         if cls.img_viewer_app_process.poll() is not None:
-            raise Exception("Failed to start the application {APP_PATH}")
+            raise Exception(f"Failed to start the application {APP_PATH}")
 
         app_coordinates = get_window_coordinates_by_title(APP_TITLE)
         LOGGER.info(f"App window coordinates: {app_coordinates}")
