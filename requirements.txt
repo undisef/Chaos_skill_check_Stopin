@@ -1,0 +1,12 @@
+# required for img_viewer application
+pillow == 11.0.0
+tk == 0.1.0
+numpy == 2.0.2
+opencv-contrib-python == 4.10.0.84
+scikit-image == 0.24.0
+
+# additionally required for testing
+pyautogui == 0.9.54
+pytesseract == 0.3.13
+lib_platform == 1.2.10
+pygetwindow == 0.0.9
