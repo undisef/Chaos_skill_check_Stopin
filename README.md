@@ -1,4 +1,4 @@
-# Chaos Skill Check Project
+# Chaos Skill Check Repository
 
 This repository contains scripts for viewing and comparing images, as well as test cases required for skill check task.
 
@@ -21,7 +21,7 @@ This repository contains scripts for viewing and comparing images, as well as te
 
 2. **Activate the virtual environment**
 
-   On macOS/Linux: 
+   On macOS: 
 
    ```bash
    source .venv/bin/activate
