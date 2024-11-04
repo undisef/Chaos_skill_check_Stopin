@@ -31,7 +31,7 @@ class ImageViewerApp:
 
         self.create_widgets()
 
-    def create_widgets(self):
+    def create_widgets(self) -> None:
         label_1 = tk.Label(root, text="Image to compare", font=("Helvetica", 15))
         label_1.place(x=15, y=15)
 
@@ -96,7 +96,7 @@ class ImageViewerApp:
         self.btn_compare.place(x=685, y=460)
         self.btn_compare.config(state=tk.DISABLED)
 
-    def load_image_1(self):
+    def load_image_1(self) -> None:
         filepath = filedialog.askopenfilename(
             initialdir=".",
             title="Select An Image",
@@ -115,7 +115,7 @@ class ImageViewerApp:
             self.image_1_compare_obj = cv2.imread(filepath)
             self.update_compare_button_state()
 
-    def load_image_2(self):
+    def load_image_2(self) -> None:
         filepath = filedialog.askopenfilename(
             initialdir=".",
             title="Select An Image",
@@ -134,7 +134,7 @@ class ImageViewerApp:
             self.image_2_compare_obj = cv2.imread(filepath)
             self.update_compare_button_state()
 
-    def save_image_1(self):
+    def save_image_1(self) -> None:
         if self.image_1:
             filepath = filedialog.asksaveasfilename(
                 defaultextension=".png",
@@ -150,7 +150,7 @@ class ImageViewerApp:
         else:
             messagebox.showwarning("No Image", "No image loaded to save.")
 
-    def save_image_2(self):
+    def save_image_2(self) -> None:
         if self.image_2:
             filepath = filedialog.asksaveasfilename(
                 defaultextension=".png",
@@ -166,13 +166,13 @@ class ImageViewerApp:
         else:
             messagebox.showwarning("No Image", "No image loaded to save.")
 
-    def update_compare_button_state(self):
+    def update_compare_button_state(self) -> None:
         if self.image_1 and self.image_2:
             self.btn_compare.config(state=tk.NORMAL)
         else:
             self.btn_compare.config(state=tk.DISABLED)
 
-    def compare_images(self):
+    def compare_images(self) -> None:
         if self.image_1_compare_obj.shape == self.image_2_compare_obj.shape:
             if self.comparison_widgets_list:
                 for widget in self.comparison_widgets_list:
@@ -224,10 +224,10 @@ class ImageViewerApp:
                 contours, _ = cv2.findContours(
                     thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
                 )
-                img1_with_diff_contours = self.image_1_compare_obj.copy()
-                cv2.drawContours(img1_with_diff_contours, contours, -1, (0, 0, 255), 2)
+                img1_with_diff_contours_obj = self.image_1_compare_obj.copy()
+                cv2.drawContours(img1_with_diff_contours_obj, contours, -1, (0, 0, 255), 2)
 
-                self.display_cv2_image_with_diff(img1_with_diff_contours)
+                self.display_cv2_image_with_diff(img1_with_diff_contours_obj)
 
             # RGP comparison
             rgb_stats_1 = self.calculate_rgb_stats(self.image_1_compare_obj)
@@ -259,7 +259,7 @@ class ImageViewerApp:
                 "Image Comparison Failed", "The dimensions of the images are not equal."
             )
 
-    def calculate_rgb_stats(self, img_obg):
+    def calculate_rgb_stats(self, img_obg: cv2.imread) -> list[float]:
         red, green, blue = cv2.split(img_obg)
 
         r_sum = npsum(red)
@@ -289,7 +289,7 @@ class ImageViewerApp:
         ]
         return color_stats
 
-    def create_table_with_rgb_stats(self, rgb_stats_1, title, start_y):
+    def create_table_with_rgb_stats(self, rgb_stats_1: list, title: str, start_y: int) -> list:
         table_widgets = []
 
         headers = [title, "Red", "Green", "Blue"]
@@ -338,8 +338,8 @@ class ImageViewerApp:
 
         return table_widgets
 
-    def display_cv2_image_with_diff(self, img_result):
-        blue, green, red = cv2.split(img_result)
+    def display_cv2_image_with_diff(self, img_result_obj: cv2.imread) -> None:
+        blue, green, red = cv2.split(img_result_obj)
         img_array = cv2.merge((red, green, blue))
         img = Image.fromarray(img_array)
         img = img.resize((self.canvas_width, self.canvas_height))

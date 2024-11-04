@@ -16,7 +16,7 @@ APP_PATH = "img_viewer.py"
 APP_TITLE = "Simple Image Viewer"
 PYTESSERACT_WIN_PATH = r'C:\Program Files\Tesseract-OCR\tesseract.exe' #variable used on Windows only
 
-def get_window_coordinates_by_title(title):
+def get_window_coordinates_by_title(title: str) -> list[int]:
     os_name = system()
     LOGGER.info(f"Operating system: {os_name}")
     if os_name == "Windows":
@@ -51,7 +51,7 @@ def get_window_coordinates_by_title(title):
         raise Exception("This function only supports Windows and macOS")
 
 
-def delete_files(files_list):
+def delete_files(files_list: list[str]) -> None:
     for file_path in files_list:
         if os.path.isfile(file_path):
             os.remove(file_path)
@@ -60,32 +60,32 @@ def delete_files(files_list):
             LOGGER.info(f"{file_path} does not exist.")
 
 
-def click_load_image_1_button(init_x, init_y):
+def click_load_image_1_button(init_x: int, init_y: int) -> None:
     pyautogui.click(init_x + 30, init_y + 90)
     sleep(1)
 
 
-def click_load_image_2_button(init_x, init_y):
+def click_load_image_2_button(init_x: int, init_y: int) -> None:
     pyautogui.click(init_x + 830, init_y + 90)
     sleep(1)
 
 
-def click_save_image_1_button(init_x, init_y):
+def click_save_image_1_button(init_x: int, init_y: int) -> None:
     pyautogui.click(init_x + 110, init_y + 90)
     sleep(1)
 
 
-def click_save_image_2_button(init_x, init_y):
+def click_save_image_2_button(init_x: int, init_y: int) -> None:
     pyautogui.click(init_x + 900, init_y + 90)
     sleep(1)
 
 
-def click_compare_button(init_x, init_y):
+def click_compare_button(init_x: int, init_y: int) -> None:
     pyautogui.click(init_x + 750, init_y + 500)
     sleep(3)
 
 
-def type_filename_in_module_window_and_save(filename):
+def type_filename_in_module_window_and_save(filename: str) -> None:
     pyautogui.write(filename)
     pyautogui.press("enter")
     sleep(2)
@@ -93,7 +93,7 @@ def type_filename_in_module_window_and_save(filename):
     sleep(1)
 
 
-def type_filename_in_module_window_and_save_in_jpg(filename):
+def type_filename_in_module_window_and_save_in_jpg(filename: str) -> None:
     pyautogui.write(filename)
     os_name = system()
     LOGGER.info(f"Operating system: {os_name}")
@@ -123,18 +123,18 @@ def type_filename_in_module_window_and_save_in_jpg(filename):
         raise Exception("This function only supports Windows and macOS")
 
 
-def search_and_open_file_in_module_window(filename):
+def search_and_open_file_in_module_window(filename: str) -> None:
     pyautogui.write(filename)
     pyautogui.press("enter")
     sleep(1)
 
 
-def make_screenshot_of_app_and_save_with_filename(filename):
+def make_screenshot_of_app_and_save_with_filename(filename: str) -> None:
     screenshot = pyautogui.screenshot(region=(0, 50, 1680, 900))
     screenshot.save(filename)
 
 
-def parse_comparison_result_status_from_app_screenshot(filename):
+def parse_comparison_result_status_from_app_screenshot(filename: str) -> str:
     result_img = Image.open(filename)
     os_name = system()
     if os_name == "Windows":
